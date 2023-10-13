@@ -1,7 +1,7 @@
-import { Constructable } from "../../types/constructable.type";
-import { DependencyInjectionSystem } from "../dependency-injection";
-import { LogSystem } from "../logging";
-import { ModuleLogService } from "../logging/services/module-log.service";
+import { Constructable } from "@/types/constructable.type";
+import { DependencyInjectionSystem } from "@dependency-injection";
+import { LogSystem } from "@logging";
+import { ModuleLogService } from "@logging/services/module-log.service";
 import { AbstractBaseGovernor } from "./governors/abstract-base.governor";
 import { AtomicModuleInterface } from "./interfaces/atomic-module.interface";
 
