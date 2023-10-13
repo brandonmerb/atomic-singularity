@@ -1,0 +1,1 @@
+export type LogFormatterType = (channel: string, message: string) => string;

@@ -1,0 +1,1 @@
+export type Constructable<Result> = new (...args: any[]) => Result;

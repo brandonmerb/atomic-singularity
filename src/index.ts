@@ -1,0 +1,1 @@
+export type { Constructable } from './types/constructable.type';
