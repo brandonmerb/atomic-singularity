@@ -1,5 +1,5 @@
 export class DependencyInjectionSystem {
-  public static _instance;
+  public static _instance: DependencyInjectionSystem;
 
   constructor() {
     DependencyInjectionSystem._instance = this;

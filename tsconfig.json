@@ -2,7 +2,7 @@
   "compilerOptions": {
     // Currently we're only targeting support for the latest tools
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
 
     // We want to emit declaration files
@@ -20,6 +20,7 @@
 
     // This emits type metadata for decorators. This is heavily leveraged by the DependencyInjection system
     "emitDecoratorMetadata": true,
+
     // Required to emit decorator metadata
     "experimentalDecorators": true,
 
@@ -62,10 +63,26 @@
       "@logging/*": [
         "src/systems/logging/*"
       ]
-    }
+    },
+
+    // The below options are mostly for code base lint-y things
+    // We want strict type checking
+    "strict": true,
+
+    // Make sure our casing is correct in file names
+    "forceConsistentCasingInFileNames": true,
+
+    // Implicit anys defeat the point of TS imo, so we disallow
+    "noImplicitAny": true,
+
+    // Certain properties make more sense to be initialized in a constructor or etc
+    // rather than requiring initialization at declaration
+    "strictPropertyInitialization": false
   },
 
+  // Potentially unnecessary
+  // The files we want to include all start in the ./src directory
   "include": [
     "src",
-  ]
+  ],
 }

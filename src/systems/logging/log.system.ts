@@ -48,7 +48,7 @@ export class LogSystem {
    * @param levelValue The level value (used to determine which messages are shown)
    */
   public addLogLevel(levelName: string, levelValue: number): void {
-    this.logLevel[levelName]= levelValue;
+    this.logLevels[levelName] = levelValue;
   }
 
   /**
@@ -91,7 +91,7 @@ export class LogSystem {
   }
 
   public isChannelVisible(channel: string): boolean {
-    const level = this.logLevel[channel] ?? LogLevelsEnum.error;
+    const level = this.logLevels[channel] ?? LogLevelsEnum.error;
     return level <= this.logLevel;
   }
 

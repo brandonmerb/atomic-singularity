@@ -7,7 +7,7 @@ export class ModuleLogService extends AbstractLogService {
     super();
   }
 
-  public override logMessage(channel: string, message: string): void {
+  public logMessage(channel: string, message: string): void {
     super.logMessage(channel, message, this.moduleFormat)
   }
 
