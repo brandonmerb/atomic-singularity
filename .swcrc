@@ -22,6 +22,9 @@
       "@authentication/*": [
         "src/systems/authentication/*"
       ],
+      "@authentication": [
+        "src/systems/authentication/index.ts"
+      ],
       "@core": [
         "src/systems/core/index.ts"
       ],

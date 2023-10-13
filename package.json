@@ -14,7 +14,7 @@
     "clean": "rimraf ./dist",
     "build": "npm run clean && npm run build:full",
     "build:common": "npm run clean && npm run build:swc",
-    "build:swc": "swc ./src -d ./dist",
+    "build:swc": "swc ./src -d ./dist/src",
     "build:full": "tsc && tsc-alias"
   },
   "devDependencies": {
@@ -30,11 +30,26 @@
     "dist/**/*.d.ts",
     "dist/**/*.js"
   ],
+
+  "main": "./dist/src/systems/core/index.js",
+
   "exports": {
-    "./*": "./dist/*",
-    "./core": "./dist/systems/index.js",
-    "./core/*": "./dist/systems/core/*",
-    "./dependency-injection/*": "./dist/systems/dependency-injection/*",
-    "./logging": "./dist/systems/logging/index.js"
+    ".": [
+      "./dist/src/systems/core/*",
+      "./dist/src/systems/core/index.js"
+    ],
+    "./dependency-injection/*": "./dist/src/systems/dependency-injection/*",
+    "./dependency-injection": [
+      "./dist/src/systems/dependency-injection/index.js"
+    ],
+    "./logging/*": "./dist/src/systems/logging/*",
+    "./logging": [
+      "./dist/src/systems/logging/index.js"
+    ],
+
+    "./authentication/*": "./dist/src/systems/authentication/*",
+    "./authentication": [
+      "./dist/src/systems/authentication/index.js"
+    ]
   }
 }

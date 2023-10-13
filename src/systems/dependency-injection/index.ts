@@ -1,1 +1,1 @@
-export { DependencyInjectionSystem } from './dependency-injection.system';
+export * from './dependency-injection.system';

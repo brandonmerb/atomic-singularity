@@ -1,5 +1,11 @@
-export { AtomicSingularitySystem } from './atomic-singularity.system';
+// All types first
+export type * from './interfaces/atomic-module.interface';
 
-export { type AtomicModuleInterface } from './interfaces/atomic-module.interface';
-export { AbstractBaseGovernor } from './governors/abstract-base.governor';
+// Base level
+export * from './atomic-singularity.system';
+
+// Governors
+export * from './governors/abstract-base.governor';
+
+// Helpers
 export * from './helpers/utility.helpers';
