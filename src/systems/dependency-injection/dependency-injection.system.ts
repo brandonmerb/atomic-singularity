@@ -1,3 +1,5 @@
+import type { DependencyTokenType } from '@dependency-injection';
+
 export class DependencyInjectionSystem {
   public static _instance: DependencyInjectionSystem;
 
@@ -12,7 +14,7 @@ export class DependencyInjectionSystem {
     return DependencyInjectionSystem._instance;
   }
 
-  public resolve<T>(token: any): T {
-    return token;
-  } 
+  // public resolve<T>(token: DependencyTokenType): T {
+  //   return null;
+  // } 
 }

@@ -1,11 +1,13 @@
 import { defineConfig, splitVendorChunkPlugin, loadEnv, UserConfig, ConfigEnv } from 'vite'
-import swc from 'rollup-plugin-swc';
+// import swc from 'rollup-plugin-swc';
 
 // TSConfig Paths is mostly for package Atomic Singularity, since it uses module paths
 // which confuse Vite & SWC during the build
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 import dts from 'vite-plugin-dts';
+import swc from 'unplugin-swc'
+
 
 export default defineConfig((config: ConfigEnv): UserConfig => {
   let plugins = [
@@ -14,13 +16,16 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
     dts({
       rollupTypes: true,
     }),
-    swc({
-      configFile: "./.swcrc",
-      rollup: {
-        include: "**/*.ts",
-        exclude: ""
-      }
+    swc.vite({
+      configFile: './.swcrc'
     })
+    // swc({
+    //   configFile: "./.swcrc",
+    //   rollup: {
+    //     include: "**/*.ts",
+    //     exclude: ""
+    //   }
+    // })
   ]
 
   return {
