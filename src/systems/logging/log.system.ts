@@ -83,10 +83,32 @@ export class LogSystem {
    */
   public logMessage(channel: string, message: string, formatter?: LogFormatterType): void {
     const isVisible = this.isChannelVisible(channel);
+    let returnVal = "";
     if (isVisible && !!formatter) {
-      formatter(channel, message);
+      returnVal = formatter(channel, message);
     } else if (isVisible && (formatter == null)) {
-      console.log(this.defaultFormatter(channel, message));
+      returnVal = this.defaultFormatter(channel, message);
+    }
+    this.displayMessage(channel, returnVal);
+  }
+
+  /**
+   * Handle actually displaying the message
+   * @param channel 
+   * @param message 
+   * @returns 
+   */
+  public displayMessage(channel: string, message: string): void {
+    switch (channel) {
+      case "warn":
+        console.warn(message);
+        return;
+      case "error":
+        console.error(message);
+        return;
+      default:
+        console.log(message);
+        return;
     }
   }
 
