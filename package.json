@@ -28,21 +28,25 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "exports": {
-    ".": [
-      "./dist/index.js",
-      "./dist/index.d.ts"
-    ],
-    "./dependency-injection": [
-      "./dist/dependency-injection.js",
-      "./dist/dependency-injection.d.ts"
-    ],
-    "./logging": [
-      "./dist/logging.js",
-      "./dist/logging.d.ts"
-    ],
-    "./authentication": [
-      "./dist/authentication.js",
-      "./dist/authentication.d.ts"
-    ]
+    ".": {
+      "default": "./dist/index.js",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./dependency-injection": {
+      "default": "./dist/dependency-injection.js",
+      "import": "./dist/dependency-injection.js",
+      "types": "./dist/dependency-injection.d.js"
+    },
+    "./logging": {
+      "default": "./dist/logging.js",
+      "import": "./dist/logging.js",
+      "types": "./dist/logging.d.ts"
+    },
+    "./authentication": {
+      "default": "./dist/authentication.js",
+      "import": "./dist/authentication.js",
+      "types": "./dist/authentication.d.ts"
+    }
   }
 }

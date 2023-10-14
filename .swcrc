@@ -1,6 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/swcrc",
 
+  // Enable source maps
+  // "sourceMaps": true,
+  // "inputSourceMap": true,
+
   // Module compilation options
   "module": {
     // We want to do ES6 modules. Only building for latest tools currently

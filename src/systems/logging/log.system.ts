@@ -32,7 +32,7 @@ export class LogSystem {
   /**
    * Used to control what level of logs are displayed
    */
-  protected logLevel: number = 0;
+  protected logLevel: number = LogLevelsEnum.system;
 
   /**
    * Set the logging level
@@ -71,7 +71,7 @@ export class LogSystem {
    * @param channel 
    * @returns 
    */
-  private _defaultFormatter(message: string, channel: string): string {
+  private _defaultFormatter(channel: string, message: string): string {
     return `[${channel.toUpperCase()}] [${moment(new Date()).format("LTS")}] ${message}`;
   }
 
@@ -85,14 +85,14 @@ export class LogSystem {
     const isVisible = this.isChannelVisible(channel);
     if (isVisible && !!formatter) {
       formatter(channel, message);
-    } else if (isVisible && !formatter) {
-      this.defaultFormatter(channel, message);
+    } else if (isVisible && (formatter == null)) {
+      console.log(this.defaultFormatter(channel, message));
     }
   }
 
   public isChannelVisible(channel: string): boolean {
     const level = this.logLevels[channel] ?? LogLevelsEnum.error;
-    return level <= this.logLevel;
+    return level >= this.logLevel;
   }
 
   public system(message: string): void {

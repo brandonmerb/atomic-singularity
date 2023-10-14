@@ -12,14 +12,14 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
     tsconfigPaths(),
     splitVendorChunkPlugin(),
     dts({
-      rollupTypes: true
+      rollupTypes: true,
     }),
     swc({
       configFile: "./.swcrc",
       rollup: {
         include: "**/*.ts",
         exclude: ""
-      },
+      }
     })
   ]
 
@@ -37,7 +37,9 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
           "logging": "./src/systems/logging/index.ts",
         },
         output: {
-          entryFileNames: '[name].js'
+          entryFileNames: '[name].js',
+          // sourcemapFileNames: "[name].js.map",
+          // sourcemap: true
         },
         external: [
           // If we don't want MomentJS to be bundled
