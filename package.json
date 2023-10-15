@@ -8,15 +8,17 @@
     "name": "Brandon Erb",
     "email": "brandom.m.erb@gmail.com"
   },
-  "dependencies": {
-    "moment": "^2.29.4",
-    "reflect-metadata": "^0.1.13"
-  },
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "npm run clean && npm run build:vite",
     "build:vite": "vite build -c vite.config.ts",
     "test": "jest"
+  },
+  "dependencies": {
+  },
+  "peerDependencies": {
+    "moment": "^2.29.4",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.62",

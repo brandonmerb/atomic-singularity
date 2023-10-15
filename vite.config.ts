@@ -44,7 +44,8 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
         },
         external: [
           // If we don't want MomentJS to be bundled
-          // "moment"
+          "moment",
+          "reflect-metadata"
         ]
       }
     },
