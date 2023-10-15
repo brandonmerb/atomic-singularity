@@ -12,5 +12,10 @@ const config: Config.InitialOptions = {
   // Support using our TS Paths without repeating them
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {prefix: "<rootDir>/"}),
   setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.ts'],
+
+  // Use SWC for our transformations
+  transform: {
+    "^.+\\.(t|j)sx?$": "@swc/jest",
+  }
 }
 export default config
