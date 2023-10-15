@@ -29,6 +29,7 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
       rollupOptions: {
         preserveEntrySignatures: 'strict',
         input: {
+          // These inputs can probably be parsed from the TS Config paths somehow
           // Currently this only houses one type. No benefit to packaging
           //"index": "./src/index.ts",
           "authentication": "./src/systems/authentication/index.ts",
@@ -43,7 +44,7 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
         },
         external: [
           // If we don't want MomentJS to be bundled
-          //"moment"
+          // "moment"
         ]
       }
     },

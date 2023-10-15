@@ -26,5 +26,5 @@ export class DependencyInjectionSystem {
 
   // public resolve<T>(token: DependencyTokenType): T {
   //   return null;
-  // } 
+  // }
 }

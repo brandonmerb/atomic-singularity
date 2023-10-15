@@ -9,7 +9,8 @@
     "email": "brandom.m.erb@gmail.com"
   },
   "dependencies": {
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "reflect-metadata": "^0.1.13"
   },
   "scripts": {
     "clean": "rimraf ./dist",

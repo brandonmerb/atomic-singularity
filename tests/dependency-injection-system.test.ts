@@ -1,7 +1,23 @@
-import { describe, test, expect,  } from "@jest/globals";
+import { describe, test, expect, } from "@jest/globals";
 
-import { DependencyInjectionSystem } from "@dependency-injection";
+import { DependencyInjectionSystem, identifyDependencies } from "@dependency-injection";
 import { SingletonAlreadyInstantiated } from "@/errors/singleton-errors";
+
+// All sorts of test cases for our DI system. They're stored elsewhere to keep this file
+// a little cleaner
+import {
+  AbstractA,
+  AbstractB,
+  ClassA,
+  ClassB,
+  ClassThatDoesItAll,
+  ClassThatExtendsAbstract, 
+  ClassThatExtendsTwoAbstracts, 
+  ClassThatImplementsInterface, 
+  ClassThatImplementsTwoInterfaces, 
+  InterfaceA, 
+  InterfaceB
+} from "./resources/di-system-resources";
 
 function systemPrefix(name: string): string {
   return `Dependency Injection System: ${name}`;
@@ -40,5 +56,6 @@ describe(systemPrefix("System functionality"), () => {
 
 describe(systemPrefix("Dependencies"), () => {
   test("yes", () => {
+    identifyDependencies(ClassThatDoesItAll);
   })
 });

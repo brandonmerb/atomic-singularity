@@ -10,6 +10,7 @@ const config: Config.InitialOptions = {
   // automock: true,
 
   // Support using our TS Paths without repeating them
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {prefix: "<rootDir>/"})
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {prefix: "<rootDir>/"}),
+  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.ts'],
 }
 export default config
