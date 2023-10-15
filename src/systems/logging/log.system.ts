@@ -1,6 +1,7 @@
 import { LogFormatterType } from "./types/log-formatter.type";
 import { LogLevelsEnum } from "./enums/log-levels.enum";
 import moment from 'moment';
+import { SingletonAlreadyInstantiated } from "@/errors/singleton-errors";
 
 export class LogSystem {
   private static _instance: LogSystem;
@@ -13,6 +14,10 @@ export class LogSystem {
   }
 
   constructor() {
+    if (LogSystem._instance != null) {
+      throw new SingletonAlreadyInstantiated("A log system instance already exists");
+    }
+
     // Always initialize to our default formatter
     this.defaultFormatter = this._defaultFormatter;
 
@@ -32,7 +37,7 @@ export class LogSystem {
   /**
    * Used to control what level of logs are displayed
    */
-  protected logLevel: number = LogLevelsEnum.system;
+  protected logLevel: number = LogLevelsEnum.info;
 
   /**
    * Set the logging level
