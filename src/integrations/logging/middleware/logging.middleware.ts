@@ -1,6 +1,6 @@
 import { LoggerInterface } from "../interfaces/logger.interface";
 import { GetLoggerFunction } from "../logger.types";
-import { SingletonAlreadyInstantiated } from "@/errors/singleton-errors";
+import { SingletonAlreadyInstantiated } from "../../../errors/singleton-errors";
 
 /**
  * Super basic Mock Logger. This is only intended to be used in the event that

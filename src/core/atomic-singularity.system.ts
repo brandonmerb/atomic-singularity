@@ -1,7 +1,7 @@
-import { Constructable } from "@/types/constructable.type";
+import { Constructable } from "../types/constructable.type";
 import { AbstractBaseGovernor } from "./governors/abstract-base.governor";
 import { AtomicModuleInterface } from "./interfaces/atomic-module.interface";
-import { LoggingMiddleware, LoggerInterface } from "@/integrations/logging";
+import { LoggingMiddleware, LoggerInterface } from "../integrations/logging";
 import { AtomicSingularitySystemOptionsInterface } from "./interfaces/atomic-singularity-system-options.interface";
 
 export class AtomicSingularitySystem {
