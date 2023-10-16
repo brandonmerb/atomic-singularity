@@ -1,13 +1,17 @@
 import { Constructable } from "@/types/constructable.type";
-import { DependencyInjectionSystem } from "@dependency-injection";
-import { LogSystem } from "@logging";
-import { ModuleLogService } from "@logging/services/module-log.service";
 import { AbstractBaseGovernor } from "./governors/abstract-base.governor";
 import { AtomicModuleInterface } from "./interfaces/atomic-module.interface";
+import { LoggingMiddleware, LoggerInterface } from "@/integrations/logging";
+import { AtomicSingularitySystemOptionsInterface } from "./interfaces/atomic-singularity-system-options.interface";
 
 export class AtomicSingularitySystem {
+  // Default system options
+  private systemOptions: AtomicSingularitySystemOptionsInterface = {
+    systemLogger: LoggingMiddleware.instance.getLogger()
+  };
+
   // Initialize the internal logger we use
-  private systemLogger: ModuleLogService = new ModuleLogService({ name: 'SYSTEM' })
+  private systemLogger: LoggerInterface;
 
   // Initialize where we're storing all of our modules
   private modules: AtomicModuleInterface[] = [];
@@ -17,19 +21,24 @@ export class AtomicSingularitySystem {
 
   private discoveryType: 'Breadth' | 'Depth' = 'Depth';
 
-  constructor() {
-    // Trigger system initialization
-    this.initializeSystems();
-
-    this.systemLogger.system("Starting Atomic Singularity System");
+  constructor(
+    options?: AtomicSingularitySystemOptionsInterface
+  ) {
+    // Update system options based on provided options
+    this.systemOptions = {
+      // User options come first, since spread does not overwrite
+      ...options,
+      // Defaults come second, since this prevents overwriting
+      ...this.systemOptions,
+    }
   }
 
   /**
    * Initialize all systems required for AtomicSingularity to work correctly
    */
   private initializeSystems(): void {
-    new LogSystem();
-    new DependencyInjectionSystem();
+    // new LogSystem();
+    // new DependencyInjectionSystem();
   }
 
   /**

@@ -19,33 +19,6 @@
     "paths": {
       "@/*": [
         "src/*"
-      ],
-      "@systems/*": [
-        "src/systems/*"
-      ],
-      "@authentication/*": [
-        "src/systems/authentication/*"
-      ],
-      "@authentication": [
-        "src/systems/authentication/index.ts"
-      ],
-      "@core": [
-        "src/systems/core/index.ts"
-      ],
-      "@core/*": [
-        "src/systems/core/*"
-      ],
-      "@dependency-injection": [
-        "src/systems/dependency-injection/index.ts"
-      ],
-      "@dependency-injection/*": [
-        "src/systems/dependency-injection/*"
-      ],
-      "@logging": [
-        "src/systems/logging/index.ts"
-      ],
-      "@logging/*": [
-        "src/systems/logging/*"
       ]
     },
 

@@ -1,6 +1,6 @@
 // jest.config.ts
 import type { Config } from "@jest/types"
-import { compilerOptions } from "./tsconfig.json";
+import { compilerOptions } from "../tsconfig.json";
 import { pathsToModuleNameMapper } from "ts-jest"
 
 const config: Config.InitialOptions = {

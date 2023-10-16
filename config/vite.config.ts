@@ -1,4 +1,4 @@
-import { defineConfig, splitVendorChunkPlugin, loadEnv, UserConfig, ConfigEnv } from 'vite'
+import { defineConfig, splitVendorChunkPlugin, UserConfig, ConfigEnv } from 'vite'
 
 // TSConfig Paths is mostly for package Atomic Singularity, since it uses module paths
 // which confuse Vite & SWC during the build
@@ -19,7 +19,7 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
       rollupTypes: true,
     }),
     swc.vite({
-      configFile: './.swcrc'
+      configFile: './config/.swcrc'
     })
   ]
 
@@ -29,13 +29,7 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
       rollupOptions: {
         preserveEntrySignatures: 'strict',
         input: {
-          // These inputs can probably be parsed from the TS Config paths somehow
-          // Currently this only houses one type. No benefit to packaging
-          //"index": "./src/index.ts",
-          "authentication": "./src/systems/authentication/index.ts",
-          "index": "./src/systems/core/index.ts",
-          "dependency-injection": "./src/systems/dependency-injection/index.ts",
-          "logging": "./src/systems/logging/index.ts",
+          "index": "./src/index.ts"
         },
         output: {
           entryFileNames: '[name].js',
@@ -43,9 +37,6 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
           // sourcemap: true
         },
         external: [
-          // If we don't want MomentJS to be bundled
-          "moment",
-          "reflect-metadata"
         ]
       }
     },
