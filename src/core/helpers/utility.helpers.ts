@@ -9,16 +9,19 @@ import { AtomicSingularitySystemOptionsInterface } from "../interfaces/atomic-si
  * @param options Options to provide for the corresponding ModuleType
  * @returns A MiddlewareUseFunction to activate the module
  */
-export function createModule<ModuleType extends AtomicModuleInterface>(options: ModuleType): MiddlewareUseFunction {
+export function createModule<ModuleType extends AtomicModuleInterface = AtomicModuleInterface>(options: ModuleType): MiddlewareUseFunction<ModuleType> {
   return (app: AtomicSingularitySystem) => {
     try {
-      app.getGovernor()
-         .activateModule(options);
+      const activeModule = app.getGovernor()
+                              .activateModule(options);
+
+      // TODO: I probably did something wrong with the type signature generics for the
+      //       as ModuleType part to be necessary
+      return (activeModule as ModuleType) ?? false;
     } catch {
       console.log(`Activation failed: ${options.name}`);
       return false;
     }
-    return true;
   };
 }
 

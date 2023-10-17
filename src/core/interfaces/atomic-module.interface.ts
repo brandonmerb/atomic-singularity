@@ -29,7 +29,7 @@ export interface AtomicModuleInterface {
    * Modules to import.
    * Note: If this module is disabled, these will not be loaded
    */
-  imports?: MiddlewareUseFunction[];
+  imports?: MiddlewareUseFunction<this>[];
 
   /**
    * Providers to be supplied to any Dependency Injection middleware

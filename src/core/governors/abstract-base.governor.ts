@@ -123,19 +123,20 @@ export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterf
    *       or activateExecutors as necessary. If that's not sufficient you can override
    *       this method entirely rather than using a super call.
    * @param module The module to activate
-   * @returns An instance of this governor for daisy chaining
+   * @returns An instance of the activated module
    */
-  public activateModule(module: ModuleType): this {
+  public activateModule(module: ModuleType): ModuleType | null {
     if (module.disabled !== true){
       this.governorLogger.system(`Activating module: ${module.name} ${module?.version ?? ""}`);
-      return this.activateExecutors(module)
-                 .activateProviders(module)
-                 .activateGovernorItems(module)
-                 .activateSubmodules(module);
+      this.activateExecutors(module)
+            .activateProviders(module)
+            .activateGovernorItems(module)
+            .activateSubmodules(module);
+      return module;
     } else {
       this.governorLogger.system(`Skipping module because it's disabled: ${module.name} ${module?.version ?? ""}`);
     }
-    return this;
+    return null
   }
 
   /**
@@ -204,7 +205,7 @@ export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterf
    * @param startingPoint An array of MiddlewareUseFunctions that hydrate AtomicModules
    * @returns An instance of this governor for daisy chaining
    */
-  protected activateSubmodulesBreadthFirst(startingPoint: Array<MiddlewareUseFunction>): this {
+  protected activateSubmodulesBreadthFirst(startingPoint: Array<MiddlewareUseFunction<ModuleType>>): this {
     throw Error("Sorry didn't implement this yet");
     return this;
   }
@@ -214,7 +215,7 @@ export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterf
    * @param startingPoint An array of MiddlewareUseFunctions that hydrate AtomicModules
    * @returns An instance of this governor for daisy chaining
    */
-  protected activateSubmodulesDepthFirst(startingPoint: Array<MiddlewareUseFunction>): this {
+  protected activateSubmodulesDepthFirst(startingPoint: Array<MiddlewareUseFunction<ModuleType>>): this {
     // Loop through each of the submodules and activate it
     startingPoint.forEach((submodule) => {
       // Activating it should cause it to call activateModule itself, causing this behavior

@@ -30,7 +30,7 @@ export class AtomicSingularitySystem {
     }
   }
 
-  public use(middleware: MiddlewareUseFunction): this {
+  public use<MiddlewareReturnType = boolean>(middleware: MiddlewareUseFunction<MiddlewareReturnType>): this {
     try {
       middleware(this);
     } catch {
