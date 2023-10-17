@@ -1,9 +1,9 @@
 export interface LoggerInterface {
-  log(channel: string, message: string): void;
+  log(channel: string, message: string): this;
 
-  system(message: string): void;
-  debug(message: string): void;
-  info(message: string): void;
-  warn(message: string): void;
-  error(message: string): void;
+  system(message: string): this;
+  debug(message: string): this;
+  info(message: string): this;
+  warn(message: string): this;
+  error(message: string): this;
 }

@@ -1,1 +1,1 @@
-export type Constructable<Result> = new (...args: any[]) => Result;
+export type Constructable<Result = any> = new (...args: any[]) => Result;

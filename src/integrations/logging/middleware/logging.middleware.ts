@@ -7,23 +7,29 @@ import { SingletonAlreadyInstantiated } from "../../../errors/singleton-errors";
  * no other loggers are provided to Atomic Singularity to use
  */
 export class MockLogger implements LoggerInterface {
-  log(channel: string, message: string): void {
-    console.log(`[${channel}] [${message}]`)
+  log(channel: string, message: string): this {
+    console.log(`[${channel}] ${message}`)
+    return this;
   }
-  system(message: string): void {
+  system(message: string): this {
     this.log("SYSTEM", message);
+    return this;
   }
-  debug(message: string): void {
+  debug(message: string): this {
     this.log("DEBUG", message);
+    return this;
   }
-  info(message: string): void {
+  info(message: string): this {
     this.log("INFO", message);
+    return this;
   }
-  warn(message: string): void {
+  warn(message: string): this {
     this.log("WARN", message);
+    return this;
   }
-  error(message: string): void {
+  error(message: string): this {
     this.log("ERROR", message);
+    return this;
   }
 }
 
@@ -33,7 +39,8 @@ export class MockLogger implements LoggerInterface {
  */
 export class LoggingMiddleware {
   // The fetchFunction that will be used by other modules
-  public getLogger: GetLoggerFunction = () => this.mockLogger;
+  // Note: The default get logger function will discard any arguments given to it
+  public getLogger: GetLoggerFunction = (...args: any[]) => this.mockLogger;
 
   // The MockLogger that will be provided to other modules if
   // no other logger is provided
@@ -54,6 +61,7 @@ export class LoggingMiddleware {
   /**
    * Instantiate a new instance of LoggingMiddleware. This class is a singleton.
    * There should never be more than one instance.
+   * Note: The default get logger function will discard any arguments given to it
    * @param getLoggerFunction The default fetchFunction to be provided to be used for other modules
    */
   constructor(

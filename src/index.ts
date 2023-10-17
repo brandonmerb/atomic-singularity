@@ -7,4 +7,5 @@ export * from './errors/singleton-errors';
 export * from './integrations/logging'
 
 export * from './types/constructable.type';
+export * from './types/middleware.types';
 export * from './util/graphing.structures';
