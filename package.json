@@ -16,8 +16,7 @@
     "test": "jest -c ./config/jest.config.ts"
   },
   "dependencies": {
-  },
-  "peerDependencies": {
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.62",

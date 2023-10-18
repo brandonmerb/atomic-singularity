@@ -19,6 +19,10 @@
       ]
     },
 
+    "types": [
+      "reflect-metadata"
+    ],
+
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,

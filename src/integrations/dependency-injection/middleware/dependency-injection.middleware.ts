@@ -1,6 +1,7 @@
 import { SingletonAlreadyInstantiated } from "../../../errors/singleton-errors";
 import { DependencyInjectionInjectionFunction, DependencyInjectionProviderFunction, DependencyInjectionSymbolGeneratorFunction } from "../dependency-injection.types";
 import { LoggingMiddleware } from '../../logging/middleware/logging.middleware';
+import { DependencyInjectionProviderArguments } from "../interfaces/dependency-injection-provider-arguments.interface";
 /**
  * Dependency Injection Middleware to allow using a DI
  * system without creating a hard link to one in particular
@@ -103,6 +104,18 @@ export class DependencyInjectionMiddleware implements DependencyInjectionMiddlew
     }
     return this;
   }
+
+  /**
+   * Provide a value to use for the corresponding symbol. This wraps
+   * the normal provide call. The intent of this is to provide an easier
+   * way to call the provide function from decorators
+   * @param config 
+   * @returns An instance of this class for daisy chaining
+   */
+    public provideWithArguments<TypeOfProvider>(config: DependencyInjectionProviderArguments<TypeOfProvider>): this {
+      return this.provide(config.provider, config.symbol, config.options);
+    }
+  
 
   /**
    * Retrieve the value of a corresponding symbol for injection
