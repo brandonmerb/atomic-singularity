@@ -7,6 +7,5 @@ node_modules/
 # Log files in general
 **.log
 
-# Anything marked as a .env should be local
-# This is primarily used for Environment variable files
+# Anything marked .local
 **.local
