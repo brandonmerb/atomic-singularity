@@ -129,9 +129,9 @@ export abstract class AbstractBaseNebula<ModuleType extends AtomicModuleInterfac
     if (module.disabled !== true){
       this.nebulaLogger.system(`Activating module: ${module.name} ${module?.version ?? ""}`);
       this.activateExecutors(module)
-            .activateProviders(module)
-            .activateNebulaItems(module)
-            .activateSubmodules(module);
+          .activateProviders(module)
+          .activateNebulaItems(module)
+          .activateSubmodules(module);
       return module;
     } else {
       this.nebulaLogger.system(`Skipping module because it's disabled: ${module.name} ${module?.version ?? ""}`);

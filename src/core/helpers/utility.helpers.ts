@@ -1,4 +1,4 @@
-import { MiddlewareUseFunction } from "@/index";
+import { LoggingMiddleware, MiddlewareUseFunction } from "@/index";
 import { AtomicSingularitySystem } from "../atomic-singularity.system";
 import { AtomicModuleInterface } from "../interfaces/atomic-module.interface";
 import { AtomicSingularitySystemOptionsInterface } from "../interfaces/atomic-singularity-system-options.interface";
@@ -10,6 +10,8 @@ import { AtomicSingularitySystemOptionsInterface } from "../interfaces/atomic-si
  * @returns A MiddlewareUseFunction to activate the module
  */
 export function createModule<ModuleType extends AtomicModuleInterface = AtomicModuleInterface>(options: ModuleType): MiddlewareUseFunction<ModuleType> {
+  // Return a middleware style function that's preconfigured to automatically
+  // activate the module within the currently active nebula
   return (app: AtomicSingularitySystem) => {
     try {
       const activeModule = app.getNebula()
@@ -19,7 +21,7 @@ export function createModule<ModuleType extends AtomicModuleInterface = AtomicMo
       //       as ModuleType part to be necessary
       return (activeModule as ModuleType) ?? false;
     } catch {
-      console.log(`Activation failed: ${options.name}`);
+      LoggingMiddleware.instance.getLogger().error(`Activation failed: ${options.name}`);
       return false;
     }
   };
