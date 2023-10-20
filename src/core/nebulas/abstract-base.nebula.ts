@@ -7,14 +7,14 @@ import { LoggingMiddleware } from '../../integrations/logging/middleware/logging
 import { MiddlewareUseFunction } from "@/index";
 
 /**
- * The base class to use when creating Governors. It contains base implementations for many of the required
+ * The base class to use when creating Nebulas. It contains base implementations for many of the required
  * pieces of functionality. You can override pieces as needed.
  */
-export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterface = AtomicModuleInterface>
+export abstract class AbstractBaseNebula<ModuleType extends AtomicModuleInterface = AtomicModuleInterface>
   implements OnImport, OnMiddleware, OnStarting, OnStarted, OnEnding, OnEnded {
   
-  // Governor specific data
-  protected governorLogger: LoggerInterface;
+  // Nebula specific data
+  protected nebulaLogger: LoggerInterface;
   protected modules: Array<ModuleType> = [];
 
   // Executor Queues
@@ -24,10 +24,10 @@ export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterf
   protected onEndedQueue: Array<ExecutorFunction> = [];
 
   /**
-   * Create a new instance of whatever the governor is, with prepopulated tools
+   * Create a new instance of whatever the nebula is, with prepopulated tools
    * such as a pre-instantiated logger loaded from our logging middleware
    * @param app A reference to the AtomicSingularitySystem
-   * @param name The name of the Governor. Mostly for logging purposes
+   * @param name The name of the Nebula. Mostly for logging purposes
    * @param logger Optionally a logger to use. If one is not provided, we'll instantiate a new one
    */
   constructor(
@@ -37,7 +37,7 @@ export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterf
     logger?: LoggerInterface
   ) {
     // If given a logger, we'll default to that. Otherwise instantiate a new one
-    this.governorLogger = logger ?? LoggingMiddleware.instance.getLogger(`Governor: ${name}`);
+    this.nebulaLogger = logger ?? LoggingMiddleware.instance.getLogger(`Nebula: ${name}`);
   }
 
   /**
@@ -111,7 +111,7 @@ export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterf
     try {
       return executor(this.app, module)
     } catch {
-      this.governorLogger.error(`${executorType} failed for: ${module.name}`)
+      this.nebulaLogger.error(`${executorType} failed for: ${module.name}`)
       return false;
     }
   }
@@ -119,7 +119,7 @@ export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterf
   /**
    * Activate the module, and trigger importing any submodules this module has
    * Note: Don't use this method as a super call. Doing so will fire the activation
-   *       sequences off in the wrong order. Instead override activateGovernorItems,
+   *       sequences off in the wrong order. Instead override activateNebulaItems,
    *       or activateExecutors as necessary. If that's not sufficient you can override
    *       this method entirely rather than using a super call.
    * @param module The module to activate
@@ -127,14 +127,14 @@ export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterf
    */
   public activateModule(module: ModuleType): ModuleType | null {
     if (module.disabled !== true){
-      this.governorLogger.system(`Activating module: ${module.name} ${module?.version ?? ""}`);
+      this.nebulaLogger.system(`Activating module: ${module.name} ${module?.version ?? ""}`);
       this.activateExecutors(module)
             .activateProviders(module)
-            .activateGovernorItems(module)
+            .activateNebulaItems(module)
             .activateSubmodules(module);
       return module;
     } else {
-      this.governorLogger.system(`Skipping module because it's disabled: ${module.name} ${module?.version ?? ""}`);
+      this.nebulaLogger.system(`Skipping module because it's disabled: ${module.name} ${module?.version ?? ""}`);
     }
     return null
   }
@@ -143,7 +143,7 @@ export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterf
    * Activate the executors for this module. This will trigger relevant executors, and
    * queue the remaining executors for the appropriate life cycle event
    * @param module The module to activate
-   * @returns An instance of this governor for daisy chaining
+   * @returns An instance of this nebula for daisy chaining
    */
   protected activateExecutors(module: ModuleType): this {
     // Don't bother with the below steps unless we have the properties
@@ -170,19 +170,19 @@ export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterf
    * Activate the providers for this module. This will trigger the Dependency Injection
    * middleware to register relevant providers
    * @param module The module to activate
-   * @returns An instance of this governor for daisy chaining
+   * @returns An instance of this nebula for daisy chaining
    */
   protected activateProviders(module: ModuleType): this {
     return this;
   }
 
   /**
-   * Override this method to provide Governor specific activations without
+   * Override this method to provide Nebula specific activations without
    * having to rewrite the activateModule method. By default this doesn't do anything
    * @param module The module to activate
-   * @returns An instance of this governor for daisy chaining
+   * @returns An instance of this nebula for daisy chaining
    */
-  protected activateGovernorItems(module: ModuleType): this {
+  protected activateNebulaItems(module: ModuleType): this {
     return this;
   }
 
@@ -203,7 +203,7 @@ export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterf
    * Activate all modules in this array in a recursive breadth first fashion
    * Note: Not implemented yet
    * @param startingPoint An array of MiddlewareUseFunctions that hydrate AtomicModules
-   * @returns An instance of this governor for daisy chaining
+   * @returns An instance of this nebula for daisy chaining
    */
   protected activateSubmodulesBreadthFirst(startingPoint: Array<MiddlewareUseFunction<ModuleType>>): this {
     throw Error("Sorry didn't implement this yet");
@@ -213,7 +213,7 @@ export abstract class AbstractBaseGovernor<ModuleType extends AtomicModuleInterf
   /**
    * Activate all modules in this array in a recursive depth first fashion
    * @param startingPoint An array of MiddlewareUseFunctions that hydrate AtomicModules
-   * @returns An instance of this governor for daisy chaining
+   * @returns An instance of this nebula for daisy chaining
    */
   protected activateSubmodulesDepthFirst(startingPoint: Array<MiddlewareUseFunction<ModuleType>>): this {
     // Loop through each of the submodules and activate it

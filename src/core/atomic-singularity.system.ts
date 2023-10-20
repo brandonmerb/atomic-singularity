@@ -1,4 +1,4 @@
-import { AbstractBaseGovernor } from "./governors/abstract-base.governor";
+import { AbstractBaseNebula } from "./nebulas/abstract-base.nebula";
 import { AtomicModuleInterface } from "./interfaces/atomic-module.interface";
 import { LoggingMiddleware, LoggerInterface } from "../integrations/logging";
 import { AtomicSingularitySystemOptionsInterface } from "./interfaces/atomic-singularity-system-options.interface";
@@ -13,8 +13,8 @@ export class AtomicSingularitySystem {
   // Initialize the internal logger we use
   private systemLogger: LoggerInterface;
 
-  // Initialize our governor storage
-  private governor: AbstractBaseGovernor;
+  // Initialize our nebula storage
+  private nebula: AbstractBaseNebula;
 
   public discoveryType: 'Breadth' | 'Depth' = 'Depth';
 
@@ -40,16 +40,16 @@ export class AtomicSingularitySystem {
   }
 
   /**
-   * Fetch the current governor being used. There should never be more than one Governor
+   * Fetch the current nebula being used. There should never be more than one Nebula
    * at a time.
-   * @returns The Governor instance in use
+   * @returns The Nebula instance in use
    */
-  public getGovernor<GovernorType extends AbstractBaseGovernor<ModuleType>, ModuleType extends AtomicModuleInterface = AtomicModuleInterface>(): GovernorType {
-    return this.governor as GovernorType;
+  public getNebula<NebulaType extends AbstractBaseNebula<ModuleType>, ModuleType extends AtomicModuleInterface = AtomicModuleInterface>(): NebulaType {
+    return this.nebula as NebulaType;
   }
 
-  public setGovernor<GovernorType extends AbstractBaseGovernor<ModuleType>, ModuleType extends AtomicModuleInterface = AtomicModuleInterface>(providedGovernor: GovernorType): this {
-    this.governor = providedGovernor;
+  public setNebula<NebulaType extends AbstractBaseNebula<ModuleType>, ModuleType extends AtomicModuleInterface = AtomicModuleInterface>(providedNebula: NebulaType): this {
+    this.nebula = providedNebula;
     return this
   }
   /**
@@ -64,12 +64,12 @@ export class AtomicSingularitySystem {
    * Trigger the system to start
    */
   public start(): void {
-    if (this.governor == null) {
-      const msg = "No Governor instance was loaded. Check that your useGovernor declaration comes before adding a module";
+    if (this.nebula == null) {
+      const msg = "No Nebula instance was loaded. Check that your useNebula declaration comes before adding a module";
       this.systemLogger.error(msg)
       new Error(msg);
     }
 
-    this.governor.start();
+    this.nebula.start();
   }
 }

@@ -39,13 +39,13 @@ export interface AtomicModuleInterface {
 
   /**
    * Executors can be used to hook into different parts of the Atomic Singularity Life cycle
-   * to achieve different outcomes. Each Governor uses these different and may or may not
+   * to achieve different outcomes. Each Nebula uses these different and may or may not
    * implement hooks for each part of the life cycle
    */
   executors?: {
     /**
      * Module Executors are executed during different parts of the module's life cycle. These
-     * are guaranteed to be run by the Atomic Singularity System. Governors may also listen for
+     * are guaranteed to be run by the Atomic Singularity System. Nebulas may also listen for
      * these hooks, but they are not guaranteed to do anything with them.
      */
     module?: {
@@ -56,7 +56,7 @@ export interface AtomicModuleInterface {
       import?: Array<ExecutorFunction>;
 
       /**
-       * Fired after all modules have been imported, but before the governors have begun initializing
+       * Fired after all modules have been imported, but before the nebulas have begun initializing
        */
       middleware?: Array<ExecutorFunction>;
     },
@@ -64,26 +64,26 @@ export interface AtomicModuleInterface {
     /**
      * System Executors are executed during different parts of the system life cycle. Generally
      * these are for things like the backend server starting up. The Atomic Singularity System
-     * will not run these by default. These are explicitly executed by relevant Governors
+     * will not run these by default. These are explicitly executed by relevant Nebulas
      */
     system?: {
       /**
-       * These are Governor implementation specific in the life cycle
+       * These are Nebula implementation specific in the life cycle
        */
       starting?: Array<ExecutorFunction>;
 
       /**
-       * These are Governor implementation specific in the life cycle
+       * These are Nebula implementation specific in the life cycle
        */
       started?: Array<ExecutorFunction>;
 
       /**
-       * These are Governor implementation specific in the life cycle
+       * These are Nebula implementation specific in the life cycle
        */
       ending?: Array<ExecutorFunction>;
 
       /**
-       * These are Governor implementation specific in the life cycle
+       * These are Nebula implementation specific in the life cycle
        */
       ended?: Array<ExecutorFunction>;
     }

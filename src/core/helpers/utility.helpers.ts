@@ -12,7 +12,7 @@ import { AtomicSingularitySystemOptionsInterface } from "../interfaces/atomic-si
 export function createModule<ModuleType extends AtomicModuleInterface = AtomicModuleInterface>(options: ModuleType): MiddlewareUseFunction<ModuleType> {
   return (app: AtomicSingularitySystem) => {
     try {
-      const activeModule = app.getGovernor()
+      const activeModule = app.getNebula()
                               .activateModule(options);
 
       // TODO: I probably did something wrong with the type signature generics for the
