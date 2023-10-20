@@ -20,8 +20,10 @@ export function createModule<ModuleType extends AtomicModuleInterface = AtomicMo
       // TODO: I probably did something wrong with the type signature generics for the
       //       as ModuleType part to be necessary
       return (activeModule as ModuleType) ?? false;
-    } catch {
-      LoggingMiddleware.instance.getLogger().error(`Activation failed: ${options.name}`);
+    } catch (ex: any) {
+      LoggingMiddleware.instance.getLogger().warn(`Module Activation failed: ${options.name}`);
+      // TODO: I kind of want a way to control these showing by default
+      // LoggingMiddleware.instance.getLogger().error(ex);
       return false;
     }
   };

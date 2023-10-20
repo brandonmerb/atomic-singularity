@@ -8,7 +8,7 @@ import { SingletonAlreadyInstantiated } from "../../../errors/singleton-errors";
  */
 export class MockLogger implements LoggerInterface {
   log(channel: string, message: string): this {
-    console.log(`[${channel}] ${message}`)
+    console.log(this.format(channel, message));
     return this;
   }
   system(message: string): this {
@@ -24,12 +24,15 @@ export class MockLogger implements LoggerInterface {
     return this;
   }
   warn(message: string): this {
-    this.log("WARN", message);
+    console.warn(this.format("WARN", message));
     return this;
   }
   error(message: string): this {
-    this.log("ERROR", message);
+    console.error(this.format("ERROR", message));
     return this;
+  }
+  format(channel: string, message: string): string {
+    return `[${channel}] ${message}`;
   }
 }
 

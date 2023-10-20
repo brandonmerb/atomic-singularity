@@ -3,6 +3,7 @@ import { AtomicModuleInterface } from "./interfaces/atomic-module.interface";
 import { LoggingMiddleware, LoggerInterface } from "../integrations/logging";
 import { AtomicSingularitySystemOptionsInterface } from "./interfaces/atomic-singularity-system-options.interface";
 import { MiddlewareUseFunction } from "../types/middleware.types";
+import { DefaultNebula } from "./nebulas/default.nebula";
 
 export class AtomicSingularitySystem {
   // Default system options
@@ -14,7 +15,7 @@ export class AtomicSingularitySystem {
   private systemLogger: LoggerInterface;
 
   // Initialize our nebula storage
-  private nebula: AbstractBaseNebula;
+  private nebula: AbstractBaseNebula = new DefaultNebula(this, "Default Nebula");
 
   public discoveryType: 'Breadth' | 'Depth' = 'Depth';
 
@@ -33,8 +34,10 @@ export class AtomicSingularitySystem {
   public use<MiddlewareReturnType = boolean>(middleware: MiddlewareUseFunction<MiddlewareReturnType>): this {
     try {
       middleware(this);
-    } catch {
-      this.systemLogger.error("Failed to execute middleware");
+    } catch (error: any) {
+      this.systemLogger.warn("Failed to execute middleware");
+      // TODO: Kind of want a way to control this
+      // this.systemLogger.error(error);
     }
     return this;
   }
