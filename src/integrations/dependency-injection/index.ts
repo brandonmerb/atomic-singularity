@@ -4,6 +4,7 @@ export type * from './interfaces/dependency-injection-provider-arguments.interfa
 export type * from './interfaces/dependency-injection-property-structure.interface';
 
 export * from './middleware/dependency-injection.middleware';
+export * from './dependency-injection.constants';
 export * from './dependency-injection.decorators';
 export * from './dependency-injection.helpers';
-export * from './dependency-injection.constants';
+export * from './dependency-injection.tokens';

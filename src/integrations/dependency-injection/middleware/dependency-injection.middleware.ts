@@ -2,6 +2,7 @@ import { SingletonAlreadyInstantiated } from "../../../errors/singleton-errors";
 import { DependencyInjectionInjectionFunction, DependencyInjectionProviderFunction, DependencyInjectionSymbolGeneratorFunction } from "../dependency-injection.types";
 import { LoggingMiddleware } from '../../logging/middleware/logging.middleware';
 import { DependencyInjectionProviderArguments } from "../interfaces/dependency-injection-provider-arguments.interface";
+import { Logger } from "../dependency-injection.tokens";
 /**
  * Dependency Injection Middleware to allow using a DI
  * system without creating a hard link to one in particular
@@ -19,6 +20,9 @@ export class DependencyInjectionMiddleware implements DependencyInjectionMiddlew
 
   // Private property for storing the singleton
   private static _instance: DependencyInjectionMiddleware;
+
+  // Private property used for caching providers until an injection
+  private providersBeforeInit: Array<DependencyInjectionProviderArguments> = [];
 
   // Public property for accessing the Dependency Injection Middleware instance
   public static get instance(): DependencyInjectionMiddleware {
@@ -43,6 +47,19 @@ export class DependencyInjectionMiddleware implements DependencyInjectionMiddlew
 
     // Make sure we update the private property with our instance
     DependencyInjectionMiddleware._instance = this;
+
+    this.provideDefaultTokens();
+  }
+
+  /**
+   * Register all of our default tokens included with Atomic Singularity
+   * These will be queued for registration if the DI system has not been
+   * provided at this point.
+   * @returns An instance of this class for daisy chaining
+   */
+  public provideDefaultTokens(): this {
+    this.provide(() => LoggingMiddleware.instance.getLogger(), Logger);
+    return this;
   }
 
   /**
@@ -56,6 +73,18 @@ export class DependencyInjectionMiddleware implements DependencyInjectionMiddlew
    */
   public setProviderFunction(func: DependencyInjectionProviderFunction): this {
     this.providerFunction = func;
+
+    /**
+     * Need to make sure we activate all providers that we stored since it was
+     * too early to init them before
+     */
+    if (this.providersBeforeInit.length > 0) {
+      for (let providerConfig of this.providersBeforeInit) {
+        this.provideWithArguments(providerConfig);
+      }
+      this.providersBeforeInit = [];
+    }
+
     return this;
   }
 
@@ -98,8 +127,14 @@ export class DependencyInjectionMiddleware implements DependencyInjectionMiddlew
       symbol = this.symbolGeneratorFunction(provider);
     }
     try {
+      // No provider function set yet, so we should store the value and register it later
+      if (this.providerFunction == null) {
+        LoggingMiddleware.instance.getLogger().warn(`Attempting to access a provider that's waiting in queue: ${symbol.toString()}`);
+        this.providersBeforeInit.push({provider, symbol, options});
+        return this;
+      }
       this.providerFunction(provider, symbol);
-    } catch {
+    } catch (ex) {
       LoggingMiddleware.instance.getLogger().error(`Failed to provide value for symbol: ${symbol.toString()}`);
     }
     return this;
@@ -125,6 +160,17 @@ export class DependencyInjectionMiddleware implements DependencyInjectionMiddlew
    * @returns The corresponding value of the provider
    */
   public inject<TypeOfProvider = (any | undefined)>(symbol: any): TypeOfProvider {
+    if (symbol == null) {
+      symbol = this.symbolGeneratorFunction(symbol);
+    }
+    if (this.providersBeforeInit.length >= 0) {
+      let pending = this.providersBeforeInit.find((provConfig) => provConfig.symbol === symbol);
+      if (pending) {
+        LoggingMiddleware.instance.getLogger().warn(`Attempting to access a provider that's waiting in queue: ${symbol}`);
+        return null as TypeOfProvider;
+      }
+    }
+
     return this.injectionFunction(symbol);
   }
 
