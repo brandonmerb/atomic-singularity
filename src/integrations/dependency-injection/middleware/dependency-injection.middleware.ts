@@ -58,7 +58,7 @@ export class DependencyInjectionMiddleware implements DependencyInjectionMiddlew
    * @returns An instance of this class for daisy chaining
    */
   public provideDefaultTokens(): this {
-    this.provide(() => LoggingMiddleware.instance.getLogger(), Logger);
+    // this.provide(null, Logger);
     return this;
   }
 

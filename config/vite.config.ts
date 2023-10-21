@@ -1,4 +1,4 @@
-import { defineConfig, splitVendorChunkPlugin, UserConfig, ConfigEnv } from 'vite'
+import { defineConfig, splitVendorChunkPlugin, loadEnv, UserConfig, ConfigEnv } from 'vite'
 
 // TSConfig Paths is mostly for package Atomic Singularity, since it uses module paths
 // which confuse Vite & SWC during the build
@@ -10,6 +10,8 @@ import dts from 'vite-plugin-dts';
 // SWC for vite to actually handle the rendering
 import swc from 'unplugin-swc'
 
+// We use Vue in this project, so the compiler needs a way to handle that via plugins
+import vue from '@vitejs/plugin-vue'
 
 export default defineConfig((config: ConfigEnv): UserConfig => {
   let plugins = [
@@ -19,29 +21,34 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
       rollupTypes: true,
     }),
     swc.vite({
-      configFile: './config/.swcrc'
-    })
+      configFile: './config/.swcrc',
+    }),
+    vue(),
   ]
 
   return {
     plugins: plugins,
     build: {
+      lib: {
+        fileName: "atomic-singularity",
+        entry: "./src/index.ts",
+        name: "AtomicSingularity"
+      },
       rollupOptions: {
-        preserveEntrySignatures: 'strict',
-        input: {
-          "index": "./src/index.ts"
-        },
         output: {
-          entryFileNames: '[name].js',
-          // sourcemapFileNames: "[name].js.map",
-          // sourcemap: true
+          // Weird fix that properly imports our CSS. It's okay if this gets
+          // tree shaken out by user's compilers, since the Warning component
+          // should never reach a production view
+          intro: "import './style.css';",
+          globals: {
+          }
         },
         external: [
         ]
-      }
+      },
+      minify: false
     },
 
-    clearScreen: true,
-    esbuild: false,
+    clearScreen: true
   }
 })
