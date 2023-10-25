@@ -9,6 +9,10 @@ import { AtomicSingularitySystemOptionsInterface } from "../interfaces/atomic-si
  * @returns A MiddlewareUseFunction to activate the module
  */
 export function createModule<ModuleType extends AtomicNebulaInterface = AtomicNebulaInterface>(options: ModuleType, preActivation?: (app?: AtomicSingularitySystem) => void): MiddlewareUseFunction {
+  if (!!preActivation) {
+    preActivation(AtomicSingularitySystem.instance);
+  }
+
   // Return a middleware style function that's preconfigured to automatically
   // activate the module within the currently active nebula
   return (app: AtomicSingularitySystem) => {
