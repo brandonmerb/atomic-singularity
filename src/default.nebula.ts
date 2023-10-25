@@ -1,7 +1,7 @@
 import { AtomicSingularitySystem } from "./atomic-singularity.system";
 import { DependencyInjectionMiddleware, ExecutorFunction, LifeCycle, LoggingMiddleware } from ".";
 import { AtomicNebulaInterface } from "./interfaces/atomic-nebula.interface";
-import { filter } from "rxjs/operators";
+import { filter, takeWhile } from "rxjs/operators";
 
 export class DefaultNebula implements AtomicNebulaInterface {
   /**
@@ -84,7 +84,8 @@ export class DefaultNebula implements AtomicNebulaInterface {
       .instance
       .onLifeCycle
       .pipe(
-        filter(stage => stage === workAround[eventListenerName])
+        filter(stage => stage === workAround[eventListenerName]),
+        takeWhile((stage) => stage === workAround[eventListenerName])
       )
       .subscribe(() => {
         executors.forEach((func) => {
