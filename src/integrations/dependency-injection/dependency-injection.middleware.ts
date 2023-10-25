@@ -155,9 +155,9 @@ export class DependencyInjectionMiddleware implements DependencyInjectionInterfa
    * @param config 
    * @returns An instance of this class for daisy chaining
    */
-    public provideWithConfig<TypeOfProvider>(config: DIProviderConfig<TypeOfProvider>): this {
-      return this.provide(config.value, config.token, config.type, config.config);
-    }
+  public provideWithConfig<TypeOfProvider>(config: DIProviderConfig<TypeOfProvider>): this {
+    return this.provide(config.value, config.token, config.type, config.config);
+  }
   
 
   /**

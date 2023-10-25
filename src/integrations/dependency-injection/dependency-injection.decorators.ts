@@ -1,3 +1,4 @@
+import { DIProviderFunction, DependencyInjectionMiddleware } from '.';
 import type { Constructable } from '../../types/constructable.type';
 
 /**
@@ -25,10 +26,10 @@ export function Inject(symbol?: any) {
  * @param args Arguments to pass to the DI system
  * @returns The constructor that was given
  */
-// export function Provide<ClassType>(args?: Omit<DependencyInjectionProviderArguments, "provider">) {
-//   return (constructor: Constructable<ClassType>) => {
-//     // DependencyInjectionMiddleware.instance.provideWithArguments({provider: constructor, ...args});
+export function Provide<ClassType>(args?: Omit<DIProviderFunction, "provider">) {
+  return (constructor: Constructable<ClassType>) => {
+    DependencyInjectionMiddleware.instance.provideWithConfig({value: constructor, ...args});
 
-//     return constructor;
-//   }
-// }
+    return constructor;
+  }
+}
