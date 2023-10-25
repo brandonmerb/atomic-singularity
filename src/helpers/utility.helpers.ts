@@ -12,14 +12,15 @@ export class NebulaBuilder<ModuleType extends AtomicNebulaInterface = AtomicNebu
   }
 
   addPreactivation(...funcs: Array<ExecutorFunction>): this {
-    this.preactivations.concat(funcs)
+    this.preactivations = this.preactivations.concat(funcs)
     return this;
   }
 
   build(): ArrowConstructor {
     return () => {
-      this.preactivations.forEach((func) => func(AtomicSingularitySystem.instance, this.module));
-
+      this.preactivations.forEach((func) => {
+        func(AtomicSingularitySystem.instance, this.module)
+      });
       return this.module;
     }
   }
