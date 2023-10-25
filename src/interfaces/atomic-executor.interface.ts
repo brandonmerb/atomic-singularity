@@ -1,5 +1,5 @@
-import type { ExecutorFunction } from "../../types/executor-functions.types";
-import type { AtomicModuleInterface } from "./atomic-module.interface";
+import type { ExecutorFunction } from "../types/executor-functions.types";
+import type { AtomicModuleInterface } from "./atomic-nebula.interface";
 
 export interface OnImport {
   onImport(module: AtomicModuleInterface, executor: ExecutorFunction): boolean;

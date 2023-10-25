@@ -1,6 +1,5 @@
-import { LoggingMiddleware, MiddlewareUseFunction } from "@/index";
+import { AtomicNebulaInterface, LoggingMiddleware, MiddlewareUseFunction } from "@/index";
 import { AtomicSingularitySystem } from "../atomic-singularity.system";
-import { AtomicModuleInterface } from "../interfaces/atomic-module.interface";
 import { AtomicSingularitySystemOptionsInterface } from "../interfaces/atomic-singularity-system-options.interface";
 
 /**
@@ -9,23 +8,18 @@ import { AtomicSingularitySystemOptionsInterface } from "../interfaces/atomic-si
  * @param options Options to provide for the corresponding ModuleType
  * @returns A MiddlewareUseFunction to activate the module
  */
-export function createModule<ModuleType extends AtomicModuleInterface = AtomicModuleInterface>(options: ModuleType): MiddlewareUseFunction<ModuleType> {
+export function createModule<ModuleType extends AtomicNebulaInterface = AtomicNebulaInterface>(options: ModuleType, preActivation?: (app?: AtomicSingularitySystem) => void): MiddlewareUseFunction {
   // Return a middleware style function that's preconfigured to automatically
   // activate the module within the currently active nebula
   return (app: AtomicSingularitySystem) => {
-    try {
-      const activeModule = app.getNebula()
-                              .activateModule(options);
+      // const activeModule = app.getNebula()
+      //                         .activateModule(options);
 
-      // TODO: I probably did something wrong with the type signature generics for the
-      //       as ModuleType part to be necessary
-      return (activeModule as ModuleType) ?? false;
-    } catch (ex: any) {
-      LoggingMiddleware.instance.getLogger().warn(`Module Activation failed: ${options.name}`);
-      // TODO: I kind of want a way to control these showing by default
-      // LoggingMiddleware.instance.getLogger().error(ex);
-      return false;
-    }
+      // // TODO: I probably did something wrong with the type signature generics for the
+      // //       as ModuleType part to be necessary
+      // return (activeModule as ModuleType) ?? false;
+
+      return options as ModuleType;
   };
 }
 

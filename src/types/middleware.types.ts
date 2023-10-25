@@ -1,6 +1,7 @@
-import type { AtomicSingularitySystem } from "../core/atomic-singularity.system";
+import { AtomicNebulaInterface } from "@/interfaces/atomic-nebula.interface";
+import type { AtomicSingularitySystem } from "../atomic-singularity.system";
 
-export type MiddlewareUseFunction<ReturnValue = boolean> = (app: AtomicSingularitySystem) => ReturnValue | false;
+export type ClassConstructor = new (app: AtomicSingularitySystem) => AtomicNebulaInterface;
+export type ArrowConstructor = (app: AtomicSingularitySystem) => AtomicNebulaInterface;
 
-export interface AtomicSingularityMiddleware {
-}
+export type MiddlewareUseFunction = ClassConstructor | ArrowConstructor | AtomicNebulaInterface;
