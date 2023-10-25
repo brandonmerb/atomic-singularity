@@ -2,12 +2,11 @@ import { AtomicSingularitySystemOptionsInterface } from "@/interfaces/atomic-sin
 import { LifeCycle } from "@/enums/life-cycle.enum";
 import { AtomicNebulaInterface } from "@/interfaces/atomic-nebula.interface";
 import { BehaviorSubject, Subject } from "rxjs";
-import { DefaultNebula } from "./default.nebula";
 import { AsyncActivationFunction } from "@/types/executor-functions.types";
 import { ArrowConstructor, ClassConstructor, MiddlewareUseFunction } from "./types/middleware.types";
 
 export class AtomicSingularitySystem {
-  private config: AtomicSingularitySystemOptionsInterface = {
+  public config: AtomicSingularitySystemOptionsInterface = {
     useDefaultNebula: true
   };
 
@@ -21,9 +20,6 @@ export class AtomicSingularitySystem {
   constructor(options?: Partial<AtomicSingularitySystemOptionsInterface>) {
     this.config = {...options, ...this.config};
     AtomicSingularitySystem.instance = this;
-    if (this.config.useDefaultNebula) {
-      this.use(DefaultNebula);
-    }
   }
 
   public use(middleware: MiddlewareUseFunction): this {

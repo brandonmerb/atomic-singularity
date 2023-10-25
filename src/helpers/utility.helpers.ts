@@ -1,30 +1,41 @@
-import { AtomicNebulaInterface, LoggingMiddleware, MiddlewareUseFunction } from "@/index";
+import { ArrowConstructor, AtomicNebulaInterface, DefaultNebula, ExecutorFunction } from "@/index";
 import { AtomicSingularitySystem } from "../atomic-singularity.system";
 import { AtomicSingularitySystemOptionsInterface } from "../interfaces/atomic-singularity-system-options.interface";
 
 /**
+ * A helper to build modules in a nicer looking fashion
+ */
+export class NebulaBuilder<ModuleType extends AtomicNebulaInterface = AtomicNebulaInterface> {
+  preactivations: Array<ExecutorFunction> = []
+
+  constructor(public module: ModuleType) {
+  }
+
+  addPreactivation(...funcs: Array<ExecutorFunction>): this {
+    this.preactivations.concat(funcs)
+    return this;
+  }
+
+  build(): ArrowConstructor {
+    return () => {
+      this.preactivations.forEach((func) => func(AtomicSingularitySystem.instance, this.module));
+
+      return this.module;
+    }
+  }
+}
+
+/**
  * Create a new module with specified options. This helper function generates
- * the middleware function expected for Atomic Singularity modules
+ * the middleware function expected for Atomic Singularity modules. Additionally
+ * you can attach preactivation functions to it to be executed before the module
+ * is actually activated. General usage looks like: createNebula({name: "test"})
+ * .addPreactivation(() => {console.log("dosomething")}).build()
  * @param options Options to provide for the corresponding ModuleType
  * @returns A MiddlewareUseFunction to activate the module
  */
-export function createModule<ModuleType extends AtomicNebulaInterface = AtomicNebulaInterface>(options: ModuleType, preActivation?: (app?: AtomicSingularitySystem) => void): MiddlewareUseFunction {
-  if (!!preActivation) {
-    preActivation(AtomicSingularitySystem.instance);
-  }
-
-  // Return a middleware style function that's preconfigured to automatically
-  // activate the module within the currently active nebula
-  return (app: AtomicSingularitySystem) => {
-      // const activeModule = app.getNebula()
-      //                         .activateModule(options);
-
-      // // TODO: I probably did something wrong with the type signature generics for the
-      // //       as ModuleType part to be necessary
-      // return (activeModule as ModuleType) ?? false;
-
-      return options as ModuleType;
-  };
+export function createNebula<ModuleType extends AtomicNebulaInterface = AtomicNebulaInterface>(options: ModuleType): NebulaBuilder {
+  return new NebulaBuilder(options);
 }
 
 /**
@@ -34,5 +45,9 @@ export function createModule<ModuleType extends AtomicNebulaInterface = AtomicNe
  * @returns An instance of the AtomicSingularitySystem
  */
 export function useAtomicApi(options?: AtomicSingularitySystemOptionsInterface): AtomicSingularitySystem {
-  return new AtomicSingularitySystem(options);
+  const ss = new AtomicSingularitySystem(options);
+  if (ss.config.useDefaultNebula === true) {
+    ss.use(DefaultNebula);
+  }
+  return ss;
 }
