@@ -1,24 +1,20 @@
-import type { DependencyInjectionProviderArguments } from './interfaces/dependency-injection-provider-arguments.interface';
-import type { DependencyInjectionPropertyStructureInterface } from './interfaces/dependency-injection-property-structure.interface';
 import type { Constructable } from '../../types/constructable.type';
-import { DependencyInjectionMiddleware } from './middleware/dependency-injection.middleware';
-import { DI_METADATA_ATTRIBUTES } from "./dependency-injection.constants";
 
 /**
  * Mark the property or argument for injection on the object
  */
 export function Inject(symbol?: any) {
   return (target: any, propertyKey: string, parameterIndex?: number) => {
-    if (!propertyKey) propertyKey = "constructor";
-    const currentDescriptors: DependencyInjectionPropertyStructureInterface = Reflect.getMetadata(DI_METADATA_ATTRIBUTES.methodsWithInjections, target) ?? {};
-    let injectionArr: any = [];
-    if (Reflect.has(currentDescriptors, propertyKey)) {
-      injectionArr = Reflect.get(currentDescriptors, propertyKey) as Array<any>;
-    }
-    injectionArr.push({symbol, type: null, index: parameterIndex});
-    Reflect.set(currentDescriptors, propertyKey, injectionArr);
+    // if (!propertyKey) propertyKey = "constructor";
+    // const currentDescriptors: DependencyInjectionPropertyStructureInterface = Reflect.getMetadata(DI_METADATA_ATTRIBUTES.methodsWithInjections, target) ?? {};
+    // let injectionArr: any = [];
+    // if (Reflect.has(currentDescriptors, propertyKey)) {
+    //   injectionArr = Reflect.get(currentDescriptors, propertyKey) as Array<any>;
+    // }
+    // injectionArr.push({symbol, type: null, index: parameterIndex});
+    // Reflect.set(currentDescriptors, propertyKey, injectionArr);
     
-    Reflect.defineMetadata(DI_METADATA_ATTRIBUTES.methodsWithInjections, currentDescriptors, target);
+    // Reflect.defineMetadata(DI_METADATA_ATTRIBUTES.methodsWithInjections, currentDescriptors, target);
   }
 }
 
@@ -29,10 +25,10 @@ export function Inject(symbol?: any) {
  * @param args Arguments to pass to the DI system
  * @returns The constructor that was given
  */
-export function Provide<ClassType>(args?: Omit<DependencyInjectionProviderArguments, "provider">) {
-  return (constructor: Constructable<ClassType>) => {
-    DependencyInjectionMiddleware.instance.provideWithArguments({provider: constructor, ...args});
+// export function Provide<ClassType>(args?: Omit<DependencyInjectionProviderArguments, "provider">) {
+//   return (constructor: Constructable<ClassType>) => {
+//     // DependencyInjectionMiddleware.instance.provideWithArguments({provider: constructor, ...args});
 
-    return constructor;
-  }
-}
+//     return constructor;
+//   }
+// }

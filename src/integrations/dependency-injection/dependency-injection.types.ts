@@ -1,21 +1,46 @@
-import { Constructable } from "../../types/constructable.type";
+import { Constructable } from "@/index";
+
+// export type DIFactoryToken = () => void;
+export type DIClassToken<T = any> = Constructable<T>;
+export type DIToken = symbol | string | DIClassToken
 
 /**
- * A function that takes any thing that can be used to create a DependencyInjectionSymbol
- * and actually creates one
+ * 
  */
-export type DependencyInjectionSymbolGeneratorFunction<SymbolReturnType = any> = (object: any) => SymbolReturnType
+export type DIFactoryFunction<FactoryResult = any, ContainerType = any> = (dependencyContainer: ContainerType) => FactoryResult
 
 /**
- * The DI Provider functions should be pretty straightforward to use. You
- * provider the symbol that you want, and the framework does the rest behind
- * the scenes to inject the correct value
+ * This function should be used to provide a way to create 
+ * tokens based on a given valid Tokenizable object that will
+ * be consistently recreated when given the same value. E.g.
+ * it shouldn't do something like generate a symbol from a non-symbol
+ * unless it consistently refers to the same symbol each time the function
+ * is called with the same value.
  */
-export type DependencyInjectionInjectionFunction<ReturnType = (any | undefined)> = (symbol: any) => ReturnType;
+export type DISymbolGeneratorFunction = (valueToTokenize: DIToken) => DIToken;
 
 /**
- * Generally DI frameworks allow arbitrary values to be provided, so we don't
- * restrict the type of Value. We do provide a generic for type safety if
- * necessary for uses in other APIs
+ * 
  */
-export type DependencyInjectionProviderFunction<ValueType = any> = (value: ValueType, symbol?: any, options?: any) => void;
+export type DIInjectorFunction<ExpectedReturnType = any> = (token: DIToken) => ExpectedReturnType;
+
+/**
+ * 
+ */
+export type DIProviderFunction<ProviderType = any> = (provider: ProviderType, token?: DIToken, type?: DIProviderTypes, config?: any) => void
+
+export type DIProviderFunctionWithConfig = (config: DIProviderConfig) => void;
+
+/**
+ * TODO
+ */
+export type DICreateContainerFunction = () => void;
+
+export type DIProviderTypes = "class" | "factory" | "value";
+
+export interface DIProviderConfig<ValueType = any, ConfigType = any> {
+  value: ValueType;
+  token?: DIToken;
+  type?: DIProviderTypes;
+  config?: ConfigType;
+}
