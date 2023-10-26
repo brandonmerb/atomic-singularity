@@ -1,7 +1,7 @@
 import { AtomicSingularitySystemOptionsInterface } from "@/interfaces/atomic-singularity-system-options.interface";
 import { LifeCycle } from "@/enums/life-cycle.enum";
 import { AtomicNebulaInterface } from "@/interfaces/atomic-nebula.interface";
-import { BehaviorSubject, Subject, takeUntil } from "rxjs";
+import { BehaviorSubject, Subject, filter, takeUntil } from "rxjs";
 import { AsyncActivationFunction } from "@/types/executor-functions.types";
 import { ArrowConstructor, ClassConstructor, MiddlewareUseFunction } from "./types/middleware.types";
 
@@ -48,12 +48,16 @@ export class AtomicSingularitySystem {
     if (!!inst.onModuleActivation) {
       if (typeof inst.onModuleActivation === "function") {
         this.onModuleActivationSubject
-          .pipe(takeUntil(this.onLifeCycle))
-          .subscribe(async (module) => await (inst.onModuleActivation as AsyncActivationFunction)(module));
+          .pipe(
+            takeUntil(this.onLifeCycle.pipe(filter((cycle) => cycle !== LifeCycle.BeforeStart)))
+          )
+          .subscribe(async (module) => {await (inst.onModuleActivation as AsyncActivationFunction)(module)});
       } else {
         inst.onModuleActivation.forEach((func) => {
           this.onModuleActivationSubject
-            .pipe(takeUntil(this.onLifeCycle))
+            .pipe(
+              takeUntil(this.onLifeCycle.pipe(filter((cycle) => cycle !== LifeCycle.BeforeStart)))
+            )
             .subscribe(async (module) => await func(module));
         });
       }

@@ -1,4 +1,4 @@
-import { MiddlewareUseFunction } from "@/index";
+import { DIProviderConfig, DIToken, MiddlewareUseFunction } from "@/index";
 import { AsyncActivationFunction, ExecutorFunction } from "../types/executor-functions.types";
 
 /**
@@ -35,7 +35,7 @@ export interface AtomicNebulaInterface {
    * Providers to be supplied to any Dependency Injection middleware
    * that's loaded
    */
-  providers?: any[];
+  providers?: Array<DIToken | DIProviderConfig>;
 
   onModuleActivation?: AsyncActivationFunction | Array<AsyncActivationFunction>;
 

@@ -1,4 +1,4 @@
-import { ArrowConstructor, AtomicNebulaInterface, DefaultNebula, ExecutorFunction } from "@/index";
+import { ArrowConstructor, AtomicNebulaInterface, DefaultNebula, DependencyInjectionMiddleware, ExecutorFunction, LoggingMiddleware } from "@/index";
 import { AtomicSingularitySystem } from "../atomic-singularity.system";
 import { AtomicSingularitySystemOptionsInterface } from "../interfaces/atomic-singularity-system-options.interface";
 

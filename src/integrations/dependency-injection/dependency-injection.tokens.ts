@@ -1,10 +1,10 @@
 // Module related tokens
-export const ParentModule: Symbol = Symbol("ad:parent-module");
-export const Module: Symbol = Symbol("ad:module");
-export const ModuleLogger: Symbol = Symbol("ad:module-logger");
+export const ParentModuleToken: symbol = Symbol("ad:parent-module");
+export const ModuleToken: symbol = Symbol("ad:module");
+export const ModuleLoggerToken: symbol = Symbol("ad:module-logger");
 
 // System related tokens
-export const SystemConfiguration: Symbol = Symbol("ad:system-config");
-export const SystemVersion: Symbol = Symbol("ad:system-version");
-export const DefaultDataSource: Symbol = Symbol("ad:default-data-source");
-export const Logger: Symbol = Symbol("ad:logger");
+export const SystemConfigurationToken: symbol = Symbol("ad:system-config");
+export const SystemVersionToken: symbol = Symbol("ad:system-version");
+export const DefaultDataSourceToken: symbol = Symbol("ad:default-data-source");
+export const LoggerToken: symbol = Symbol("ad:logger");

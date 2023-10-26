@@ -1,19 +1,26 @@
 import { AtomicSingularitySystem } from "./atomic-singularity.system";
-import { DependencyInjectionMiddleware, ExecutorFunction, LifeCycle, LoggingMiddleware } from ".";
+import { DIProviderConfig, DependencyInjectionMiddleware, ExecutorFunction, LifeCycle, LoggerToken, LoggingMiddleware } from ".";
 import { AtomicNebulaInterface } from "./interfaces/atomic-nebula.interface";
 import { filter, takeWhile } from "rxjs/operators";
 
 export class DefaultNebula implements AtomicNebulaInterface {
   /**
    * Whatever happens in the constructor should be run before
-   * the Nebulas have finished registering themselves
+   * the Nebulas have finished registering themselves. This is
+   * equivalent to the preactivation method on the Nebula builder
    * @param app 
    */
   constructor(app: AtomicSingularitySystem){
-
   }
 
-  name: string = "Default Nebula";
+  public name: string = "Default Nebula";
+  public providers: Array<DIProviderConfig> = [
+    {
+      value: LoggingMiddleware.instance.getLogger(),
+      token: LoggerToken,
+    }
+  ]
+
   // version?: string | undefined;
   // disabled?: boolean | undefined;
   // imports?: MiddlewareUseFunction<this>[] | undefined;
@@ -47,6 +54,13 @@ export class DefaultNebula implements AtomicNebulaInterface {
 
   public registerProviders(module: AtomicNebulaInterface): this {
     if (module.providers && module.providers.length > 0) {
+      module.providers.forEach((provider) => {
+        if (Object.keys(provider).includes("value")) {
+          DependencyInjectionMiddleware.instance.provideWithConfig(provider as DIProviderConfig)
+        } else {
+          DependencyInjectionMiddleware.instance.provide(provider)
+        }
+      });
     }
     return this;
   }
