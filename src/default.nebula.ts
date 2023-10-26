@@ -1,5 +1,5 @@
 import { AtomicSingularitySystem } from "./atomic-singularity.system";
-import { DIProviderConfig, DependencyInjectionMiddleware, ExecutorFunction, LifeCycle, LoggerToken, LoggingMiddleware } from ".";
+import { DIProviderConfig, DependencyInjectionMiddleware, ExecutorFunction, LifeCycle, LoggerToken, LoggingMiddleware, SystemVersionToken } from ".";
 import { AtomicNebulaInterface } from "./interfaces/atomic-nebula.interface";
 import { filter, takeWhile } from "rxjs/operators";
 
@@ -16,26 +16,17 @@ export class DefaultNebula implements AtomicNebulaInterface {
   public name: string = "Default Nebula";
   public providers: Array<DIProviderConfig> = [
     {
-      value: LoggingMiddleware.instance.getLogger(),
+      value: () => LoggingMiddleware.instance.getLogger(),
       token: LoggerToken,
+      type: "factory"
+    },
+    {
+      // TODO: Make this dynamically insert from package.json via Vite build tools
+      value: "1.0.0",
+      token: SystemVersionToken,
+      type: "value"
     }
   ]
-
-  // version?: string | undefined;
-  // disabled?: boolean | undefined;
-  // imports?: MiddlewareUseFunction<this>[] | undefined;
-  // providers?: any[] | undefined;
-  // onModuleActivation?: Promise<ExecutorFunction> | Promise<ExecutorFunction>[] | undefined;
-  // onBeforeStart?: ExecutorFunction | ExecutorFunction[] | undefined;
-  // onStarted?: ExecutorFunction | ExecutorFunction[] | undefined;
-  // onBeforeEnd?: ExecutorFunction | ExecutorFunction[] | undefined;
-  // onBeforeEnded?: ExecutorFunction | ExecutorFunction[] | undefined;
-
-  // onModuleActivation = (app: AtomicSingularitySystem, module: any): Promise<boolean> => {
-  //   return new Promise((resolve, reject) => {
-  //     resolve(true);
-  //   });
-  // }
 
   async onModuleActivation(module: AtomicNebulaInterface): Promise<boolean> {
     return new Promise((resolve, reject) => {

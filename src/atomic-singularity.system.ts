@@ -15,6 +15,7 @@ export class AtomicSingularitySystem {
   public nebulas: Array<AtomicNebulaInterface> = [];
 
   public onModuleActivationSubject = new Subject<AtomicNebulaInterface>();
+  public afterModuleActivationSubject = new Subject<AtomicNebulaInterface>();
   public onLifeCycle = new BehaviorSubject<LifeCycle>(LifeCycle.BeforeStart);
 
   constructor(options?: Partial<AtomicSingularitySystemOptionsInterface>) {
@@ -63,6 +64,24 @@ export class AtomicSingularitySystem {
       }
     }
 
+    if (!!inst.afterModuleActivation) {
+      if (typeof inst.afterModuleActivation === "function") {
+        this.afterModuleActivationSubject
+          .pipe(
+            takeUntil(this.onLifeCycle.pipe(filter((cycle) => cycle !== LifeCycle.BeforeStart)))
+          )
+          .subscribe(async (module) => {await (inst.afterModuleActivation as AsyncActivationFunction)(module)});
+      } else {
+        inst.afterModuleActivation.forEach((func) => {
+          this.afterModuleActivationSubject
+            .pipe(
+              takeUntil(this.onLifeCycle.pipe(filter((cycle) => cycle !== LifeCycle.BeforeStart)))
+            )
+            .subscribe(async (module) => await func(module));
+        });
+      }
+    }
+
     // Recursively register all middleware. The Default Nebula is responsible
     // for hooking up providers and other event subscribers
     if (!!inst.imports && inst.imports.length > 0) {
@@ -77,6 +96,10 @@ export class AtomicSingularitySystem {
   public start(): void {
     this.nebulas.forEach((nebula) => {
       this.onModuleActivationSubject.next(nebula);
+    });
+
+    this.nebulas.forEach((nebula) => {
+      this.afterModuleActivationSubject.next(nebula);
     });
 
     this.onModuleActivationSubject.complete();
