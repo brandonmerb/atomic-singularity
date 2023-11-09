@@ -37,6 +37,8 @@ export interface AtomicNebulaInterface {
    */
   providers?: Array<DIToken | DIProviderConfig>;
 
+  configure: AsyncActivationFunction | Array<AsyncActivationFunction>;
+
   onModuleActivation?: AsyncActivationFunction | Array<AsyncActivationFunction>;
   afterModuleActivation?: AsyncActivationFunction | Array<AsyncActivationFunction>;
 
