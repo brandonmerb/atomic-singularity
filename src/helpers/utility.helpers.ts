@@ -1,11 +1,46 @@
-import { ArrowConstructor, AtomicNebulaInterface, DefaultNebula, DependencyInjectionMiddleware, ExecutorFunction, LoggingMiddleware } from "@/index";
+import { ArrowConstructor, AtomicNebulaInterface, DefaultNebula, ExecutorFunction } from "@/index";
 import { AtomicSingularitySystem } from "../atomic-singularity.system";
 import { AtomicSingularitySystemOptionsInterface } from "../interfaces/atomic-singularity-system-options.interface";
+import { AnyNebulaType } from "@/types/generic.types";
+
+/**
+ * Singleton = Root level only
+ * Transient = Unique per nebula
+ * Scoped = Inherits configurations from parents, with the nearest descendent taking priority
+ */
+export type ConfigurationValueScope = "singleton" | "scoped" | "transient";
+
+export class ConfigurationBuilder<NebulaType = AnyNebulaType, ConfigurationType = {}> {
+  constructor(public module: NebulaType) {}
+
+  setGlobal<KeyType extends keyof ConfigurationType, ValueType = ConfigurationType[KeyType]>(key: KeyType, value: ValueType): this {
+
+    return this;
+  }
+
+  setTransient<KeyType extends keyof ConfigurationType, ValueType = ConfigurationType[KeyType]>(key: KeyType, value: ValueType): this {
+
+    return this;
+  }
+
+  setScoped<KeyType extends keyof ConfigurationType, ValueType = ConfigurationType[KeyType]>(key: KeyType, value: ValueType): this {
+
+    return this;
+  }
+
+  get<KeyType extends keyof ConfigurationType, ValueType = ConfigurationType[KeyType]>(key: KeyType): ValueType {
+
+  }
+}
+
+function useModuleConfiguration<NebulaType = AnyNebulaType, ConfigurationType = {}>(module: NebulaType): ConfigurationBuilder<NebulaType, ConfigurationType> {
+  return new ConfigurationBuilder<NebulaType, ConfigurationType>(module);
+}
 
 /**
  * A helper to build modules in a nicer looking fashion
  */
-export class NebulaBuilder<ModuleType extends AtomicNebulaInterface = AtomicNebulaInterface> {
+export class NebulaBuilder<ModuleType extends AtomicNebulaInterface = AtomicNebulaInterface, ConfigurationType = {}> {
   preactivations: Array<ExecutorFunction> = []
 
   constructor(public module: ModuleType) {
@@ -15,6 +50,22 @@ export class NebulaBuilder<ModuleType extends AtomicNebulaInterface = AtomicNebu
     this.preactivations = this.preactivations.concat(funcs)
     return this;
   }
+
+  addConfigurableOption<KeyType extends keyof ConfigurationType, ValueType = ConfigurationType[KeyType]>(optionName: KeyType, defaultValue?: ValueType, scope?: ConfigurationValueScope): this {
+    return this;
+  }
+
+  addConfigurable(configuration: ConfigurationType): this {
+    return this;
+  }
+
+  configure(scope?: ConfigurationValueScope): ConfigurationBuilder {
+    return useConfigurationBuilder(this.module);
+  }
+
+  // addConfigurations(): this {
+
+  // }
 
   build(): ArrowConstructor {
     return () => {
@@ -35,8 +86,8 @@ export class NebulaBuilder<ModuleType extends AtomicNebulaInterface = AtomicNebu
  * @param options Options to provide for the corresponding ModuleType
  * @returns A MiddlewareUseFunction to activate the module
  */
-export function createNebula<ModuleType extends AtomicNebulaInterface = AtomicNebulaInterface>(options: ModuleType): NebulaBuilder {
-  return new NebulaBuilder(options);
+export function createNebula<ModuleType extends AtomicNebulaInterface = AtomicNebulaInterface, ConfigurationType = {}>(options: ModuleType): NebulaBuilder<ModuleType, ConfigurationType> {
+  return new NebulaBuilder<ModuleType, ConfigurationType>(options);
 }
 
 /**
