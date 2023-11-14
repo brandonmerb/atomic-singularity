@@ -1,5 +1,9 @@
 // import { AtomicNebulaInterface } from "@/index";
+import { useDI } from '@/index';
 import type { AnyNebulaType } from '../../types/generic.types';
+import { DIProviderConfig, DIToken } from '../dependency-injection';
+
+const diMiddleware = useDI();
 
 export class ConfigurationMiddleware {
   // Private property for storing the singleton
@@ -17,7 +21,8 @@ export class ConfigurationMiddleware {
     return this._instance;
   }
 
-  public addConfigurationToNebula(nebula: AnyNebulaType, propertyName: string): this {
+  public addConfigurationDefault<DefaultValue = {}>(nebula: AnyNebulaType, providerToken: DIToken, defaultValue: DefaultValue): this {
+    
     return this;
   }
 }

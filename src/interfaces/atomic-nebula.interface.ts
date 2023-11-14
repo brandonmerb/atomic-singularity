@@ -1,11 +1,13 @@
 import { DIProviderConfig, DIToken, MiddlewareUseFunction } from "@/index";
 import { AsyncActivationFunction, ExecutorFunction } from "../types/executor-functions.types";
 
+export type ConfigurationProviderArray<ConfigurationRoot = {}> = Array<Partial<Record<keyof ConfigurationRoot, ConfigurationRoot[keyof ConfigurationRoot]> & {provider: DIToken | DIProviderConfig}>>;
+
 /**
  * A Standard Atomic Module. Additional plugins may inherit from this
  * base interface and implement their own features on top of it
  */
-export interface AtomicNebulaInterface {
+export interface AtomicNebulaInterface<ConfigurationSettings = {}> {
   /**
    * The Module name. This is required to help with distinguishing modules
    */
@@ -37,7 +39,7 @@ export interface AtomicNebulaInterface {
    */
   providers?: Array<DIToken | DIProviderConfig>;
 
-  configure: AsyncActivationFunction | Array<AsyncActivationFunction>;
+  configurationSettings?: ConfigurationProviderArray<ConfigurationSettings>;
 
   onModuleActivation?: AsyncActivationFunction | Array<AsyncActivationFunction>;
   afterModuleActivation?: AsyncActivationFunction | Array<AsyncActivationFunction>;

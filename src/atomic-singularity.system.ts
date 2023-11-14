@@ -4,6 +4,7 @@ import { AtomicNebulaInterface } from "@/interfaces/atomic-nebula.interface";
 import { BehaviorSubject, Subject, filter, takeUntil } from "rxjs";
 import { AsyncActivationFunction } from "@/types/executor-functions.types";
 import { ArrowConstructor, ClassConstructor, MiddlewareUseFunction } from "./types/middleware.types";
+import { NebulaBuilder } from ".";
 
 export class AtomicSingularitySystem {
   public config: AtomicSingularitySystemOptionsInterface = {
@@ -25,15 +26,24 @@ export class AtomicSingularitySystem {
 
   public use(middleware: MiddlewareUseFunction): this {
     let inst: AtomicNebulaInterface;
-    if (typeof middleware === "object") {
+
+    // Determine what type of middleware we got, and take necessary execution steps
+    if (middleware instanceof NebulaBuilder) {
+      // Nebula builder, so let's build it
+      inst = middleware.build();
+    } else if (typeof middleware == "object") {
+      // This was an object directly, so we assume it's prepared
       inst = middleware;
-    } else if (typeof middleware === "function") {
+    } else if (typeof middleware == "function") {
+      // This is either a class constructor or an arrow constructor, so we'll try both
       try {
         inst = new (middleware as ClassConstructor)(this);
       } catch (ex) {
         inst = (middleware as ArrowConstructor)(this);
       }
     } else {
+      // This didn't appear to be any of the above, so we'll immediately return since no other
+      // formats are supported
       return this;
     }
 
